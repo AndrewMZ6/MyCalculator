@@ -1,119 +1,117 @@
-import tkinter as tk
+# Модуль логики logic.py
 
-root = tk.Tk()
-mainEntry = tk.Entry()
-mainEntry.pack()
+expression = '' # Переменная в которую записывается ВСЁ
 
-class typeNumber:
-    def __init__(self, n):
-        self.n = n
 
-    def insertNumber(self, n):
-        mainEntry.insert(0, n)
 
-def typeOne(n):
-    r = typeNumber(1)
-    r.insertNumber
+def press(num): 		# Подаем в функцию переменную num
 
-def typePlus():
-    mainEntry.insert(0, "+")
+	global expression 		# Загружаем глобально переменну
 
-def typeMinus():
-    mainEntry.insert(0, "-")
+	expression = expression + str(num)		# конкатенация
 
-def typeMultiply():
-    mainEntry.insert(0, "*")
+	equation.set(expression)   	# set устанавливает значение ТКИНТЕРОВСКОЙ переменной equation = tkinter.StringVar()
+								# эта переменная была объявлена в модуле GUI, но так как я отделил логику и 
+								# интерфейс она перекочевала сюда. Надо что-то придумать
 
-def typeDivide():
-    mainEntry.insert(0, "/")
 
-def typeReset():
-    mainEntry.delete(0, tk.END)
+def equalpress():						# Нажатие РАВНО =
 
-def Calculate():
-    x = mainEntry.get()
-    L = []
-    Q = []
-    R = ('0', '1', '2', '3', '4', '5', '6', '7', '8', '9')
-    D = ("+", "*", "/", "-")
-    for i in x:
-    	if i in R:
-    		L.append(int(i))
-    	elif i in D:
-    		Q.append(i)
+	try:
 
-    if Q[0] == "+":
-    	z = L[0] + L[1]
-    	mainEntry.delete(0, tk.END)
-    	mainEntry.insert(0, z)
+		global expression              # Используем переменную expression глобально
 
-    elif Q[0] == "-":
-    	z = L[0] - L[1]
-    	mainEntry.delete(0, tk.END)
-    	mainEntry.insert(0, z)
+		total = str(eval(expression))   # подсчитываем значение expression, преобразуем в строку и заносим в total
 
-    elif Q[0] == "*":
-    	z = L[0] * L[1]
-    	mainEntry.delete(0, tk.END)
-    	mainEntry.insert(0, z)
+		equation.set(total)           	# значение total передаем в перемененую equation
 
-    elif Q[0] == "/":
-    	z = L[0] / L[1]
-    	mainEntry.delete(0, tk.END)
-    	mainEntry.insert(0, z)
+		expression = ''					# обнуляем значение expression
 
-frame1 = tk.Frame(root)
+	except:
+
+		equation.set(" Error ")       # Если произошла ошибка вычисления, например деление на 0, вывести на экран Error
+
+		expression = ''				  # И обнулить expression
+
+def clear():
+
+	global expression
+
+	expression = ''
+	
+	equation.set('')
+
+# Модуль графического интерфейса gui.py
+
+import tkinter 
+
+root = tkinter.Tk()
+
+##########################################
+### Здесь вставляем начинку интерфейса ### -----------------------------------------------------------------------------------
+##########################################
+
+# Создание главного (корневого) окна калькулятора
+root.geometry('300x150')         # Размеры - высота, ширина
+root.configure(bg = '#f2e6d9') 	 # Цвет фона
+root.title('My Calculator')		 # Заголовок главного окна
+
+# Ткинтеровская переменная, содержимое которой выводится на экран
+equation = tkinter.StringVar()
+
+# Фрейм размещения окна дисплея
+frame1 = tkinter.Frame(root, bg = '#ffb3b3') # bg - цвет заднего фона
 frame1.pack()
 
-frame2 = tk.Frame(root)
+# Окно дисплея калькулятора
+display = tkinter.Entry(frame1, width = 40, textvariable = equation) # Надо посмотреть как меня высоту окна. height??
+display.pack()														 # 
+
+equation.set('Enter your expression')
+
+# Фрейм размещения кнопок калькулятора
+frame2 = tkinter.Frame(root, bg = '#9999ff')
 frame2.pack()
 
-buttonOne = tk.Button(frame1, text = "1", width = 3, height = 3, command = typeOne)
-buttonOne.grid(row = 0, column = 0)
 
-buttonTwo = tk.Button(frame1, text = "2", width = 3, height = 3, command = typeTwo)
-buttonTwo.grid(row = 1, column = 0)
+# Кнопки калькулятора --------------------------------------------------- Кнопки калькулятора --------------------------------------
+button1 = tkinter.Button(frame2 , command = lambda: press(1), text = '1', height = 1, width = 7)
+button1.grid(row = 0, column = 0)
+button2 = tkinter.Button(frame2 , command = lambda: press(2), text = '2', height = 1, width = 7)
+button2.grid(row = 0, column = 1)
+button3 = tkinter.Button(frame2 , command = lambda: press(3), text = '3', height = 1, width = 7)
+button3.grid(row = 0, column = 2)
+button4 = tkinter.Button(frame2 , command = lambda: press(4), text = '4', height = 1, width = 7)
+button4.grid(row = 1, column = 0)
+button5 = tkinter.Button(frame2 , command = lambda: press(5), text = '5', height = 1, width = 7)
+button5.grid(row = 1, column = 1)
+button6 = tkinter.Button(frame2 , command = lambda: press(6), text = '6', height = 1, width = 7)
+button6.grid(row = 1, column = 2)
+button7 = tkinter.Button(frame2 , command = lambda: press(7), text = '7', height = 1, width = 7)
+button7.grid(row = 2, column = 0)
+button8 = tkinter.Button(frame2 , command = lambda: press(8), text = '8', height = 1, width = 7)
+button8.grid(row = 2, column = 1)
+button9 = tkinter.Button(frame2 , command = lambda: press(9), text = '9', height = 1, width = 7)
+button9.grid(row = 2, column = 2)
+button0 = tkinter.Button(frame2 , command = lambda: press(0), text = '0', height = 1, width = 7)
+button0.grid(row = 3, column = 1)
+Plus = tkinter.Button(frame2 , command = lambda: press('+'), text = '+', height = 1, width = 7)
+Plus.grid(row = 0, column = 3)
+Minus = tkinter.Button(frame2 , command = lambda: press('-'), text = '-', height = 1, width = 7)
+Minus.grid(row = 1, column = 3)
+Clear = tkinter.Button(frame2 , command = clear, text = 'C', height = 1, width = 7)
+Clear.grid(row = 2, column = 3)
+Result = tkinter.Button(frame2, command = equalpress, text = '=', height = 1, width = 7)
+Result.grid(row = 3, column = 3)
+Divide = tkinter.Button(frame2 , command = lambda: press('/'), text = '/', height = 1, width = 7)
+Divide.grid(row = 3, column = 0)
+Mult = tkinter.Button(frame2 , command = lambda: press('*'), text = '*', height = 1, width = 7)
+Mult.grid(row = 3, column = 2)
+# ----------------------------------------------------------------------------------------------------------------------------------
 
-buttonThree = tk.Button(frame1, text = "3", width = 3, height = 3, command = typeThree)
-buttonThree.grid(row = 2, column = 0)
 
-buttonFour = tk.Button(frame1, text = "4", width = 3, height = 3, command = typeFour)
-buttonFour.grid(row = 0, column = 1)
-
-buttonFive = tk.Button(frame1, text = "5", width = 3, height = 3, command = typeFive)
-buttonFive.grid(row = 1, column = 1)
-
-buttonSix = tk.Button(frame1, text = "6", width = 3, height = 3, command = typeSix)
-buttonSix.grid(row = 2, column = 1)
-
-buttonSeven = tk.Button(frame1, text = "7", width = 3, height = 3, command = typeSeven)
-buttonSeven.grid(row = 0, column = 2)
-
-buttonEight = tk.Button(frame1, text = "8", width = 3, height = 3, command = typeEight)
-buttonEight.grid(row = 1, column = 2)
-
-buttonNine = tk.Button(frame1, text = "9", width = 3, height = 3, command = typeNine)
-buttonNine.grid(row = 2, column = 2)
-
-buttonZero = tk.Button(frame1, text = "0", width = 3, height = 3, command = typeZero)
-buttonZero.grid(row = 0, column = 3)
-
-buttonPlus = tk.Button(frame2, text = "+", width = 3, height = 3, command = typePlus)
-buttonPlus.grid(row = 0, column = 0)
-
-buttonMinus = tk.Button(frame2, text = "-", width = 3, height = 3, command = typeMinus)
-buttonMinus.grid(row = 0, column = 1)
-
-buttonMultiply = tk.Button(frame2, text = "*", width = 3, height = 3, command = typeMultiply)
-buttonMultiply.grid(row = 0, column = 2)
-
-buttonDivide = tk.Button(frame2, text = "/", width = 3, height = 3, command = typeDivide)
-buttonDivide.grid(row = 0, column = 3)
-
-buttonResult = tk.Button(frame1, text = "=", width = 3, height = 3, command = Calculate)	
-buttonResult.grid(row = 1, column = 3)
-
-buttonReset = tk.Button(frame1, text = "Reset", width = 3, height = 3, command = typeReset)	
-buttonReset.grid(row = 2, column = 3)
+################################
+### Конец начинки интерфейса ### ----------------------------------------------------------------------------------------------------
+################################
 
 root.mainloop()
